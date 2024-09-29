@@ -1,65 +1,55 @@
 import java.util.Scanner;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String[] employeeIds = new String[100];
-        String[] employeeNames = new String[100];
-        String[] clockInTimes = new String[100];
-        String[] clockOutTimes = new String[100];
+        // Each "row" represents an employee, columns are: ID, Name, Clock In, Clock Out
+        String[][] employees = new String[100][4]; 
         int employeeCount = 0;
 
         // Add sample employees
-        addEmployee(employeeIds, employeeNames, employeeCount++, "1001", "John Doe");
-        addEmployee(employeeIds, employeeNames, employeeCount++, "1002", "Jane Smith");
+        addEmployee(employees, employeeCount++, "1001", "John Doe");
+        addEmployee(employees, employeeCount++, "1002", "Jane Smith");
 
         while (true) {
             System.out.println("\nEmployee Management System");
             System.out.println("1. Clock In/Out");
             System.out.println("2. Add New Employee");
             System.out.println("3. Show All Employees");
-            System.out.println("4. Remove Employee"); // Added option
-            System.out.println("5. Exit"); // Shifted option number
+            System.out.println("4. Remove Employee");
+            System.out.println("5. Exit");
             System.out.print("Choose an option: ");
 
-            String input = scanner.nextLine().trim();
-            int choice;
-
-            try {
-                choice = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                continue;
-            }
+            int choice = getIntegerInput(scanner);
 
             switch (choice) {
                 case 1:
                     System.out.print("Enter employee ID: ");
                     String id = scanner.nextLine().trim();
-                    clockInOut(id, employeeIds, employeeNames, clockInTimes, clockOutTimes, employeeCount);
+                    clockInOut(id, employees, employeeCount);
                     break;
                 case 2:
-                    if (addEmployee(employeeIds, employeeNames, employeeCount, scanner)) {
+                    if (addEmployee(employees, employeeCount, scanner)) {
                         employeeCount++;
                     }
                     break;
                 case 3:
-                    showAllEmployees(employeeIds, employeeNames, clockInTimes, clockOutTimes, employeeCount);
+                    showAllEmployees(employees, employeeCount);
                     break;
-                case 4: // Remove employee logic
+                case 4:
                     System.out.print("Enter employee ID to remove: ");
                     String idToRemove = scanner.nextLine().trim();
-                    if (removeEmployee(idToRemove, employeeIds, employeeNames, clockInTimes, clockOutTimes, employeeCount)) {
+                    if (removeEmployee(idToRemove, employees, employeeCount)) {
                         employeeCount--;
                         System.out.println("Employee removed successfully.");
                     } else {
                         System.out.println("Employee not found.");
                     }
                     break;
-                case 5: // Exit
+                case 5:
                     System.out.println("Exiting the employee management system !!");
                     scanner.close();
                     return;
@@ -69,26 +59,27 @@ public class Main {
         }
     }
 
-    public static void clockInOut(String id, String[] ids, String[] names, String[] inTimes, String[] outTimes,
-            int count) {
-        int index = findEmployeeIndex(id, ids, count);
+    // ... (Other methods adapted for the multidimensional array)
+
+    public static void clockInOut(String id, String[][] employees, int count) {
+        int index = findEmployeeIndex(id, employees, count);
         if (index != -1) {
-            LocalTime currentTime = LocalTime.now();
-            String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            if (inTimes[index] == null || outTimes[index] != null) {
-                inTimes[index] = formattedTime;
-                outTimes[index] = null;
-                System.out.println(names[index] + " clocked in at " + formattedTime);
+            LocalDateTime currentTime = LocalDateTime.now();
+            String formattedTime = currentTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            if (employees[index][2] == null || employees[index][3] != null) {
+                employees[index][2] = formattedTime; // Clock in
+                employees[index][3] = null; // Reset clock out
+                System.out.println(employees[index][1] + " clocked in at " + formattedTime);
             } else {
-                outTimes[index] = formattedTime;
-                System.out.println(names[index] + " clocked out at " + formattedTime);
+                employees[index][3] = formattedTime; // Clock out
+                System.out.println(employees[index][1] + " clocked out at " + formattedTime);
             }
         } else {
             System.out.println("Employee not found.");
         }
     }
 
-    public static void showAllEmployees(String[] ids, String[] names, String[] inTimes, String[] outTimes, int count) {
+    public static void showAllEmployees(String[][] employees, int count) {
         if (count == 0) {
             System.out.println("No employees in the system.");
             return;
@@ -97,15 +88,15 @@ public class Main {
         System.out.println("All Employees:");
         for (int i = 0; i < count; i++) {
             System.out.println("\nEmployee #" + (i + 1));
-            System.out.println("ID: " + ids[i]);
-            System.out.println("Name: " + names[i]);
-            System.out.println("Last Clock In: " + (inTimes[i] != null ? inTimes[i] : "N/A"));
-            System.out.println("Last Clock Out: " + (outTimes[i] != null ? outTimes[i] : "N/A"));
+            System.out.println("ID: " + employees[i][0]);
+            System.out.println("Name: " + employees[i][1]);
+            System.out.println("Last Clock In: " + (employees[i][2] != null ? employees[i][2] : "N/A"));
+            System.out.println("Last Clock Out: " + (employees[i][3] != null ? employees[i][3] : "N/A"));
         }
     }
 
-    public static boolean addEmployee(String[] ids, String[] names, int count, Scanner scanner) {
-        if (count >= ids.length) {
+    public static boolean addEmployee(String[][] employees, int count, Scanner scanner) {
+        if (count >= employees.length) {
             System.out.println("Employee database is full. Cannot add more employees.");
             return false;
         }
@@ -113,7 +104,7 @@ public class Main {
         System.out.print("Enter new employee ID: ");
         String newId = scanner.nextLine();
 
-        if (findEmployeeIndex(newId, ids, count) != -1) {
+        if (findEmployeeIndex(newId, employees, count) != -1) {
             System.out.println("An employee with this ID already exists.");
             return false;
         }
@@ -121,42 +112,44 @@ public class Main {
         System.out.print("Enter new employee name: ");
         String newName = scanner.nextLine();
 
-        return addEmployee(ids, names, count, newId, newName);
+        return addEmployee(employees, count, newId, newName);
     }
 
-    private static boolean addEmployee(String[] ids, String[] names, int count, String newId, String newName) {
-        ids[count] = newId;
-        names[count] = newName;
+    private static boolean addEmployee(String[][] employees, int count, String newId, String newName) {
+        employees[count][0] = newId;
+        employees[count][1] = newName;
         System.out.println("Employee " + newName + " (ID: " + newId + ") added successfully.");
         return true;
     }
 
-    private static int findEmployeeIndex(String id, String[] ids, int count) {
+    private static int findEmployeeIndex(String id, String[][] employees, int count) {
         for (int i = 0; i < count; i++) {
-            if (ids[i].equals(id)) {
+            if (employees[i][0].equals(id)) {
                 return i;
             }
         }
         return -1;
     }
-    public static boolean removeEmployee(String id, String[] ids, String[] names, String[] inTimes, String[] outTimes, int count) {
-        int index = findEmployeeIndex(id, ids, count);
+
+    public static boolean removeEmployee(String id, String[][] employees, int count) {
+        int index = findEmployeeIndex(id, employees, count);
         if (index != -1) {
-            // Shift elements to remove the employee at the given index
             for (int i = index; i < count - 1; i++) {
-                ids[i] = ids[i + 1];
-                names[i] = names[i + 1];
-                inTimes[i] = inTimes[i + 1];
-                outTimes[i] = outTimes[i + 1];
+                employees[i] = employees[i + 1]; 
             }
-            // Clear the last element
-            ids[count - 1] = null;
-            names[count - 1] = null;
-            inTimes[count - 1] = null;
-            outTimes[count - 1] = null;
+            employees[count - 1] = new String[4]; // Clear the last row
             return true;
         }
         return false;
     }
 
+    private static int getIntegerInput(Scanner scanner) {
+        while (true) {
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+    }
 }
