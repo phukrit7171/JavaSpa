@@ -4,10 +4,14 @@ import java.time.format.DateTimeFormatter;
 
 public class Main {
     public static void main(String[] args) {
+        employeeSystem();
+    }
+
+    public static void employeeSystem() {
         Scanner scanner = new Scanner(System.in);
 
         // Each "row" represents an employee, columns are: ID, Name, Clock In, Clock Out
-        String[][] employees = new String[100][4]; 
+        String[][] employees = new String[100][4];
         int employeeCount = 0;
 
         // Add sample employees
@@ -58,7 +62,6 @@ public class Main {
             }
         }
     }
-
     // ... (Other methods adapted for the multidimensional array)
 
     public static void clockInOut(String id, String[][] employees, int count) {
@@ -135,7 +138,7 @@ public class Main {
         int index = findEmployeeIndex(id, employees, count);
         if (index != -1) {
             for (int i = index; i < count - 1; i++) {
-                employees[i] = employees[i + 1]; 
+                employees[i] = employees[i + 1];
             }
             employees[count - 1] = new String[4]; // Clear the last row
             return true;
