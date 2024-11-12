@@ -10,13 +10,13 @@ public class Main {
     public static void employeeSystem() {
         Scanner scanner = new Scanner(System.in);
 
-        // Each "row" represents an employee, columns are: ID, Name, Clock In, Clock Out
-        String[][] employees = new String[100][4];
+        // Initialize the employee array with a size of 0
+        String[][] employees = new String[0][4];
         int employeeCount = 0;
 
         // Add sample employees
-        addEmployee(employees, employeeCount++, "1001", "John Doe");
-        addEmployee(employees, employeeCount++, "1002", "Jane Smith");
+        employees = addEmployee(employees, employeeCount++, "1001", "John Doe");
+        employees = addEmployee(employees, employeeCount++, "1002", "Jane Smith");
 
         while (true) {
             System.out.println("\nEmployee Management System");
@@ -36,9 +36,8 @@ public class Main {
                     clockInOut(id, employees, employeeCount);
                     break;
                 case 2:
-                    if (addEmployee(employees, employeeCount, scanner)) {
-                        employeeCount++;
-                    }
+                    employees = addEmployee(employees, employeeCount, scanner);
+                    employeeCount++;
                     break;
                 case 3:
                     showAllEmployees(employees, employeeCount);
@@ -62,7 +61,6 @@ public class Main {
             }
         }
     }
-    // ... (Other methods adapted for the multidimensional array)
 
     public static void clockInOut(String id, String[][] employees, int count) {
         int index = findEmployeeIndex(id, employees, count);
@@ -98,10 +96,9 @@ public class Main {
         }
     }
 
-    public static boolean addEmployee(String[][] employees, int count, Scanner scanner) {
+    public static String[][] addEmployee(String[][] employees, int count, Scanner scanner) {
         if (count >= employees.length) {
-            System.out.println("Employee database is full. Cannot add more employees.");
-            return false;
+            employees = resizeArray(employees);  // Resize if no space is available
         }
 
         System.out.print("Enter new employee ID: ");
@@ -109,20 +106,24 @@ public class Main {
 
         if (findEmployeeIndex(newId, employees, count) != -1) {
             System.out.println("An employee with this ID already exists.");
-            return false;
+            return employees;
         }
 
         System.out.print("Enter new employee name: ");
         String newName = scanner.nextLine();
 
-        return addEmployee(employees, count, newId, newName);
+        addEmployee(employees, count, newId, newName);
+        return employees;
     }
 
-    private static boolean addEmployee(String[][] employees, int count, String newId, String newName) {
+    private static String[][] addEmployee(String[][] employees, int count, String newId, String newName) {
+        if (count >= employees.length) {
+            employees = resizeArray(employees); // Ensure resizing before adding
+        }
         employees[count][0] = newId;
         employees[count][1] = newName;
         System.out.println("Employee " + newName + " (ID: " + newId + ") added successfully.");
-        return true;
+        return employees;
     }
 
     private static int findEmployeeIndex(String id, String[][] employees, int count) {
@@ -154,5 +155,16 @@ public class Main {
                 System.out.println("Invalid input. Please enter a number.");
             }
         }
+    }
+
+    // Method to resize the employee array when it's full
+    private static String[][] resizeArray(String[][] oldArray) {
+        int newSize = (oldArray.length == 0) ? 2 : oldArray.length * 2; // Start with 2 if empty, otherwise double the size
+        String[][] newArray = new String[newSize][4];
+        for (int i = 0; i < oldArray.length; i++) {
+            newArray[i] = oldArray[i];
+        }
+        // System.out.println("Array resized to " + newSize);
+        return newArray;
     }
 }
