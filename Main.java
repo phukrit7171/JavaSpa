@@ -488,20 +488,21 @@ public class Main {
     }
 
     //รับราคาสินค้าและบริการจากผู้ใช้
-    public static double[] inputPrices(int itemCount, Scanner scanner){
+    public static double[] inputPrices(int itemCount, Scanner scanner) {
         double[] prices = new double[itemCount];
-        for (int i = 0 ; i < itemCount ; i++){
+        for (int i = 0; i < itemCount; i++) {
             while (true) {
                 try {
-                    System.out.print("price list of items "+(i+1)+": ");
+                    System.out.print("Price of item " + (i + 1) + ": ");
                     prices[i] = scanner.nextDouble();
                     if (prices[i] < 0) {
-                        System.out.println("The price must be integers. Please enter again.");
-                    }else {
+                        System.out.println("Price must be non-negative. Please enter again.");
+                    } else {
                         break;
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Integers only. Enter again.");
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid number.");
+                    scanner.nextLine(); // Clear the invalid input
                 }
             }
         }
