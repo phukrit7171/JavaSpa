@@ -80,7 +80,6 @@ public class Main {
                         CheckQueue(name, age, numPhone, timestamp);
                         break;
                     case 3:
-                        sc.nextLine();
                         return;
                     default:
                         System.out.println("Invalid choice. Enter again.");
