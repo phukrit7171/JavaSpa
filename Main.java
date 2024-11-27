@@ -256,11 +256,11 @@ public class Main {
         System.out.print("Enter new employee name: ");
         String newName = scanner.nextLine();
 
-        addEmployee(employees, count, newId, newName);
+        updateEmployee(employees, count, newId, newName);
         return employees;
     }
 
-    private static String[][] addEmployee(String[][] employees, int count, String newId, String newName) {
+    private static String[][] updateEmployee(String[][] employees, int count, String newId, String newName) {
         if (count >= employees.length) {
             employees = resizeArray(employees); // Ensure resizing before adding
         }
