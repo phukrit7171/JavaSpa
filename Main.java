@@ -425,16 +425,15 @@ phoneNumber[i].equals(search)) {
         int itemCount = 0;
         while (true) {
             System.out.print("Please enter the number of products and services you have received: ");
-            String input = scanner.next();
             try {
-                itemCount = Integer.parseInt(input); // แปลงข้อมูลที่รับเข้ามาเป็นจำนวนเต็ม
+                itemCount = Integer.parseInt(scanner.next());
                 if (itemCount <= 0) {
-                    System.out.println("The number of items must be integer. Please enter again.");
+                    System.out.println("The number of items must be positive. Please enter again.");
                 } else {
                     break;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Integers only. Enter again.");
+                System.out.println("Invalid input. Integers only. Enter again.");
             }
         }
 
@@ -442,12 +441,14 @@ phoneNumber[i].equals(search)) {
         double[] prices = inputPrices(itemCount, scanner);
 
         // คำนวณยอดรวม
-        double total = calculateTotal(prices);
-        System.out.println("Total amount of products and services: " + total + " THB");
+        double total = 0.0;
+        for (double price : prices) {
+            total += price;
+        }
 
-        //ตรวจสอบว่า ลูกค้าเป็นสมาชิกหรือไม่ เพื่อใช้ในการคำนวณส่วนลด 10% ในกรณีที่เป็นสมาชิก
+        // ตรวจสอบว่า ลูกค้าเป็นสมาชิกหรือไม่ เพื่อใช้ในการคำนวณส่วนลด
         boolean isMember = false;
-        while (true){
+        while (true) {
             System.out.print("Do you have membership (yes/no): ");
             String memberInput = scanner.next();
             if (memberInput.equalsIgnoreCase("yes")) {
@@ -457,61 +458,44 @@ phoneNumber[i].equals(search)) {
                 isMember = false;
                 break;
             } else {
-                System.out.println("Please enter only 'yes' or 'no'");
+                System.out.println("Please enter only 'yes' or 'no'.");
             }
         }
 
-        // หักส่วนลดหากผู้ใช้เป็นสมาชิก
-        double finalAmount = applyMemberDiscount(total, isMember);
+        // คำนวณส่วนลด (ถ้ามี)
+        double finalAmount = isMember ? total * 0.9 : total;
 
         // พิมพ์ใบเสร็จ
         printReceipt(prices, total, isMember, finalAmount);
     }
 
-    //คำนวณยอดรวมของสินค้าและบริการ
-    public static double calculateTotal(double[] prices) {
-        double total = 0.0;
-        for (double price : prices) {
-            total += price;
-        }
-        return total;
-    }
-
-    //หักส่วนลด 10% ให้กับสมาชิก
-    public static double applyMemberDiscount(double total, boolean isMember) {
-        if (isMember) {
-            total *= 0.9;
-        }
-        return total;
-    }
-
-    //รับราคาสินค้าและบริการจากผู้ใช้
+    // รับราคาสินค้าและบริการจากผู้ใช้
     public static double[] inputPrices(int itemCount, Scanner scanner) {
         double[] prices = new double[itemCount];
         for (int i = 0; i < itemCount; i++) {
             while (true) {
                 try {
-                    System.out.print("Price of item " + (i + 1) + ": ");
+                    System.out.print("Price list of items " + (i + 1) + ": ");
                     prices[i] = scanner.nextDouble();
                     if (prices[i] < 0) {
-                        System.out.println("Price must be non-negative. Please enter again.");
+                        System.out.println("The price must be positive. Please enter again.");
                     } else {
                         break;
                     }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a valid number.");
-                    scanner.nextLine(); // Clear the invalid input
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a valid price.");
+                    scanner.next(); // Clear the invalid input
                 }
             }
         }
         return prices;
     }
 
-    //พิมพ์ใบเสร็จ
-    public static void printReceipt(double[] prices, double total, boolean isMember, double finalAmount){
+    // พิมพ์ใบเสร็จ
+    public static void printReceipt(double[] prices, double total, boolean isMember, double finalAmount) {
         System.out.println("\n--- Receipt ---");
-        for (int i = 0 ; i < prices.length ; i++){
-            System.out.printf("item %d: %.2f THB\n", (i + 1), prices[i]);
+        for (int i = 0; i < prices.length; i++) {
+            System.out.printf("Item %d: %.2f THB\n", (i + 1), prices[i]);
         }
         System.out.printf("Total amount of products and services: %.2f THB\n", total);
         if (isMember) {
