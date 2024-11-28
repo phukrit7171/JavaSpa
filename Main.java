@@ -397,14 +397,13 @@ public class Main {
     public static void checkMembership(String[] name, int[] age, String[] phoneNumber) {
         Scanner input = new Scanner(System.in);
         System.out.println("\nMembership Checking System");
-        System.out.print("\nEnter customer's name, age, or phone number to check membership: ");
+        System.out.print("\nEnter customer's name, or phone number to check membership: ");
         String search = input.next();
         boolean found = false;
 
         for (int i = 0; i < name.length; i++) {
-            if (name[i].equalsIgnoreCase(search) ||
-                    String.valueOf(age[i]).equals(search) ||
-                    phoneNumber[i].equals(search)) {
+            if (name[i].equalsIgnoreCase(search) || 
+phoneNumber[i].equals(search)) {
 
                 System.out.println("Member Found:");
                 System.out.println("Name: " + name[i]);
