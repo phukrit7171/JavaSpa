@@ -316,7 +316,7 @@ public class Main {
 
     // Employee code ภูกริช กิตตินนท์ธนา END
 
-    // customers code
+    // customers code พรปวีณ์ คุ้มมี 672110149
     public static void ManageCustomers(Scanner input) {
         String[] name = new String[0];
         int[] age = new int[0];
@@ -420,7 +420,7 @@ phoneNumber[i].equals(search)) {
             System.out.println("No member found with the information.");
         }
     }
-    // customers code END
+    // customers code พรปวีณ์ คุ้มมี END
 
     // Payment code กชกร กิติมา 672110132
     public static void ManagePayment(Scanner scanner) {
