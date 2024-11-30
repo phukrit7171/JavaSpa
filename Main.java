@@ -1,9 +1,10 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.time.LocalDateTime; // ภูกริช กิตตินนท์ธนา 672110154
+import java.time.format.DateTimeFormatter; // ภูกริช กิตตินนท์ธนา 672110154
+import java.util.InputMismatchException; // รชานนท์ อินต๊ะมี 672110157
+import java.util.Scanner; // รชานนท์ อินต๊ะมี 672110157
 
 public class Main {
+    // รชานนท์ อินต๊ะมี 672110157
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -156,8 +157,9 @@ public class Main {
         return newArray;
     }
     // Queue code END
+    // รชานนท์ อินต๊ะมี END
 
-    // Employee code
+    // Employee code ภูกริช กิตตินนท์ธนา 672110154
     public static void employeeSystem(Scanner scanner) {
         // Initialize the employee array with a size of 0
         String[][] employees = new String[0][4];
@@ -312,7 +314,7 @@ public class Main {
         return newArray;
     }
 
-    // Employee code END
+    // Employee code ภูกริช กิตตินนท์ธนา END
 
     // customers code
     public static void ManageCustomers(Scanner input) {
@@ -420,7 +422,7 @@ phoneNumber[i].equals(search)) {
     }
     // customers code END
 
-    // Payment code
+    // Payment code กชกร กิติมา 672110132
     public static void ManagePayment(Scanner scanner) {
         int itemCount = 0;
         while (true) {
@@ -504,7 +506,7 @@ phoneNumber[i].equals(search)) {
         System.out.printf("Total amount (Including discount): %.2f THB\n", finalAmount);
         System.out.println("-----------------------");
     }
-    // Payment code END
+    // Payment code กชกร กิติมา END
 
     // store code
     public static void ManageStore(Scanner scanner) {
@@ -538,7 +540,8 @@ phoneNumber[i].equals(search)) {
         displayOrder(orderedItems, orderedQuantities, orderCount);
     }
 
-    // Method สำหรับเพิ่มหรืออัปเดตสินค้าและจำนวน
+    // ศุภกฤต แสนวงค์คำ 672110162
+    // Method สำหรับเพิ่มหรืออัปเดตสินค้าและจำนวน 
     public static int addItem(String itemName, int quantity, String[] orderedItems, int[] orderedQuantities, int orderCount) {
         if (orderCount >= orderedItems.length) {
             System.out.println("Cannot add more items. Order limit reached.");
@@ -576,5 +579,7 @@ phoneNumber[i].equals(search)) {
             System.out.println("Product : " + orderedItems[i] + " Quantity : " + orderedQuantities[i]);
         }
     }
+     // ศุภกฤต แสนวงค์คำ END
+
     // store code END
 }
